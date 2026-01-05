@@ -150,5 +150,19 @@ export const TFT_TOOLS: Tool[] = [
       },
       required: ["matchId"]
     }
+  },
+  {
+    name: "tft_coaching",
+    description: "Get personalized coaching recommendations based on recent match analysis. Compares your performance with meta data to identify strengths, weaknesses, and improvement opportunities.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        matchCount: {
+          type: "number",
+          default: 10,
+          description: "Number of recent matches to analyze (default: 10, max: 20)"
+        }
+      }
+    }
   }
 ];
