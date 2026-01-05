@@ -164,5 +164,25 @@ export const TFT_TOOLS: Tool[] = [
         }
       }
     }
+  },
+  {
+    name: "tft_lp_history",
+    description: "Track LP progression over time. Stores match results and LP changes locally for historical analysis.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        action: {
+          type: "string",
+          enum: ["view", "update", "reset"],
+          default: "view",
+          description: "view = show history, update = fetch new matches, reset = clear history"
+        },
+        matchCount: {
+          type: "number",
+          default: 10,
+          description: "Number of recent matches to check for updates (default: 10)"
+        }
+      }
+    }
   }
 ];

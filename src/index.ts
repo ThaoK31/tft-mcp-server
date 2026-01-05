@@ -16,6 +16,7 @@ import { TFT_TOOLS } from "./tools/index.js";
 import { handleTftMatchDetails, handleTftMatchHistory, handleTftMatchSummary } from "./tools/match.js";
 import { handleTftMatchTracker } from "./tools/tracker.js";
 import { handleTftCoaching } from "./tools/coaching.js";
+import { handleTftLPHistory } from "./tools/lphistory.js";
 import { handleTftRankedStats } from "./tools/ranked.js";
 import {
   handleTftMetaComps,
@@ -159,6 +160,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
       case "tft_coaching": {
         return await handleTftCoaching(request.params.arguments as { matchCount?: number });
+      }
+      case "tft_lp_history": {
+        return await handleTftLPHistory(request.params.arguments as { action?: "view" | "update" | "reset"; matchCount?: number });
       }
       default:
         throw new McpError(
