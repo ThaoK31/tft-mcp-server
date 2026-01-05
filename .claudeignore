@@ -1,0 +1,11 @@
+# Dependencies (huge)
+node_modules/
+
+# Build output (redundant with src)
+dist/
+
+# Lock file (large, not useful for context)
+package-lock.json
+
+# Test files
+test-*.js
