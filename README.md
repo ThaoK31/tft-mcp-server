@@ -105,7 +105,6 @@ Create `.mcp.json` in your project directory:
 | `tft_coaching` | Personalized recommendations based on recent matches (param: `matchCount`) |
 | `tft_compare_players` | Compare your stats with another player (params: `gameName`, `tagLine`) |
 | `tft_lookup_player` | Look up any player's rank and recent performance |
-| `tft_best_items` | Best individual items for a champion (not combos) |
 | `tft_export_data` | Export match data to CSV or JSON format |
 
 ### Meta Data
@@ -118,6 +117,7 @@ Create `.mcp.json` in your project directory:
 | `tft_meta_items` | Stats for all items (avg placement, win rate) |
 | `tft_meta_traits` | Stats for all traits by level (e.g., Brawler 2, Brawler 4) |
 | `tft_unit_builds` | Best-in-slot items for each champion |
+| `tft_best_items` | Best individual items for a specific champion |
 | `tft_current_patch` | Current patch info and total games analyzed |
 
 ### Tool Details
