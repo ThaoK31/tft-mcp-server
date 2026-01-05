@@ -209,14 +209,14 @@ export const TFT_TOOLS: Tool[] = [
     }
   },
   {
-    name: "tft_item_recommendations",
-    description: "Get best item builds and recommendations for a specific champion. Shows top builds, best individual items, and win rates.",
+    name: "tft_best_items",
+    description: "Get best individual items for a champion (ranked by winrate, NOT combos). Use tft_unit_builds for full BiS builds.",
     inputSchema: {
       type: "object",
       properties: {
         champion: {
           type: "string",
-          description: "Champion name to get item recommendations for (e.g., 'Ahri', 'Jinx')"
+          description: "Champion name (e.g., 'Kindred', 'Jinx')"
         }
       },
       required: ["champion"]

@@ -20,7 +20,7 @@ interface UnitBuild {
 /**
  * Get item recommendations for a specific champion
  */
-export async function handleTftItemRecommendations(params: { champion: string }) {
+export async function handleTftBestItems(params: { champion: string }) {
   const { champion } = params;
   const searchName = champion.toLowerCase().trim();
 
@@ -35,16 +35,18 @@ export async function handleTftItemRecommendations(params: { champion: string })
       throw new Error(`MetaTFT API error: ${response.status}`);
     }
 
-    const data = await response.json() as Record<string, any>;
+    const json = await response.json() as Record<string, any>;
+    const unitsData = json?.units || {};
 
     // Find the champion (fuzzy match)
     let foundChampion: string | null = null;
     let championData: any = null;
 
-    for (const [unitId, unitData] of Object.entries(data)) {
-      const name = getChampionName(unitId).toLowerCase();
-      if (name === searchName || name.includes(searchName) || unitId.toLowerCase().includes(searchName)) {
-        foundChampion = getChampionName(unitId);
+    for (const [unitId, unitData] of Object.entries(unitsData)) {
+      // Clean unitId: TFT16_Kindred -> Kindred
+      const cleanedName = unitId.replace(/^TFT\d+_/, "").toLowerCase();
+      if (cleanedName === searchName || cleanedName.includes(searchName) || unitId.toLowerCase().includes(searchName)) {
+        foundChampion = unitId.replace(/^TFT\d+_/, "");
         championData = unitData;
         break;
       }
@@ -52,10 +54,11 @@ export async function handleTftItemRecommendations(params: { champion: string })
 
     if (!foundChampion || !championData) {
       // List available champions
-      const availableChampions = Object.keys(data)
-        .map(id => getChampionName(id))
-        .filter(name => name && !name.startsWith("TFT"))
-        .sort();
+      const availableChampions = Object.keys(unitsData)
+        .map(id => id.replace(/^TFT\d+_/, ""))
+        .filter(name => name && name.length > 0)
+        .sort()
+        .slice(0, 30);
 
       return {
         content: [{
@@ -63,83 +66,39 @@ export async function handleTftItemRecommendations(params: { champion: string })
           text: JSON.stringify({
             error: `Champion "${champion}" not found`,
             suggestion: "Try one of these champions",
-            availableChampions: availableChampions.slice(0, 20)
+            availableChampions
           }, null, 2)
         }],
         isError: true
       };
     }
 
-    // Parse item builds
-    const builds: UnitBuild[] = [];
-    if (championData.item_builds) {
-      for (const [itemCombo, stats] of Object.entries(championData.item_builds)) {
-        const s = stats as any;
-        if (s.count && s.count >= 50) {
-          const items = itemCombo.split(",").map((id: string) => getItemName(id.trim()));
-          const placements = s.placements || [];
-          const total = placements.reduce((a: number, b: number) => a + b, 0);
-          const avgPlacement = total > 0
-            ? placements.reduce((sum: number, count: number, idx: number) => sum + count * (idx + 1), 0) / total
-            : 5;
+    // Get best items for this champion (from items array)
+    const items = (championData.items || []).slice(0, 10).map((i: any) => {
+      const itemName = (i.itemName || "").replace(/^TFT_Item_/, "").replace(/_/g, " ");
+      return {
+        name: itemName,
+        avgPlacement: i.avg?.toFixed(2) || "-",
+        pickRate: `${((i.pick || 0) * 100).toFixed(1)}%`,
+        games: i.count || 0
+      };
+    });
 
-          builds.push({
-            items,
-            games: s.count,
-            avgPlacement: Math.round(avgPlacement * 100) / 100
-          });
-        }
-      }
-    }
-
-    // Sort by avg placement
-    builds.sort((a, b) => a.avgPlacement - b.avgPlacement);
-
-    // Get best individual items
-    const itemStats: Record<string, { count: number; placements: number[] }> = {};
-    if (championData.item_builds) {
-      for (const [itemCombo, stats] of Object.entries(championData.item_builds)) {
-        const s = stats as any;
-        const items = itemCombo.split(",");
-        for (const item of items) {
-          const itemName = getItemName(item.trim());
-          if (!itemStats[itemName]) {
-            itemStats[itemName] = { count: 0, placements: [] };
-          }
-          itemStats[itemName].count += s.count || 0;
-          if (s.placements) {
-            for (let i = 0; i < s.placements.length; i++) {
-              if (!itemStats[itemName].placements[i]) itemStats[itemName].placements[i] = 0;
-              itemStats[itemName].placements[i] += s.placements[i];
-            }
-          }
-        }
-      }
-    }
-
-    const bestItems = Object.entries(itemStats)
-      .filter(([_, s]) => s.count >= 100)
-      .map(([name, s]) => {
-        const total = s.placements.reduce((a, b) => a + b, 0);
-        const avgPlacement = total > 0
-          ? s.placements.reduce((sum, count, idx) => sum + count * (idx + 1), 0) / total
-          : 5;
-        return { name, games: s.count, avgPlacement: Math.round(avgPlacement * 100) / 100 };
-      })
-      .sort((a, b) => a.avgPlacement - b.avgPlacement)
-      .slice(0, 10);
+    // Get champion overall stats
+    const avgPlacement = championData.avg?.toFixed(2) || "-";
+    const pickRate = `${((championData.pick || 0) * 100).toFixed(1)}%`;
+    const games = championData.count || 0;
 
     const result = {
       champion: foundChampion,
-      bestBuilds: builds.slice(0, 5).map((b, i) => ({
-        rank: i + 1,
-        items: b.items,
-        avgPlacement: b.avgPlacement,
-        games: b.games
-      })),
-      bestIndividualItems: bestItems,
-      tip: builds.length > 0
-        ? `Best in slot: ${builds[0].items.join(" + ")} (avg ${builds[0].avgPlacement})`
+      overallStats: {
+        avgPlacement,
+        pickRate,
+        games
+      },
+      bestItems: items,
+      tip: items.length > 0
+        ? `Best in slot: ${items.slice(0, 3).map((i: any) => i.name).join(" + ")}`
         : "Not enough data for this champion"
     };
 

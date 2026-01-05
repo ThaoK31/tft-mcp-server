@@ -18,7 +18,7 @@ import { handleTftMatchTracker } from "./tools/tracker.js";
 import { handleTftCoaching } from "./tools/coaching.js";
 import { handleTftLPHistory } from "./tools/lphistory.js";
 import { handleTftComparePlayers } from "./tools/compare.js";
-import { handleTftItemRecommendations, handleTftExportData, handleTftLookupPlayer } from "./tools/utility.js";
+import { handleTftBestItems, handleTftExportData, handleTftLookupPlayer } from "./tools/utility.js";
 import { handleTftRankedStats } from "./tools/ranked.js";
 import {
   handleTftMetaComps,
@@ -169,8 +169,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case "tft_compare_players": {
         return await handleTftComparePlayers(request.params.arguments as { gameName: string; tagLine: string; matchCount?: number });
       }
-      case "tft_item_recommendations": {
-        return await handleTftItemRecommendations(request.params.arguments as { champion: string });
+      case "tft_best_items": {
+        return await handleTftBestItems(request.params.arguments as { champion: string });
       }
       case "tft_export_data": {
         return await handleTftExportData(request.params.arguments as { format?: "csv" | "json"; matchCount?: number });

@@ -105,7 +105,7 @@ Create `.mcp.json` in your project directory:
 | `tft_coaching` | Personalized recommendations based on recent matches (param: `matchCount`) |
 | `tft_compare_players` | Compare your stats with another player (params: `gameName`, `tagLine`) |
 | `tft_lookup_player` | Look up any player's rank and recent performance |
-| `tft_item_recommendations` | Get best item builds for a specific champion |
+| `tft_best_items` | Best individual items for a champion (not combos) |
 | `tft_export_data` | Export match data to CSV or JSON format |
 
 ### Meta Data
@@ -183,18 +183,18 @@ Look up any player's rank and recent performance without comparing to yourself.
 | `tagLine` | string | *required* | Player's tag line (e.g., `EUW`, `NA1`) |
 | `matchCount` | number | 5 | Recent matches to show |
 
-#### tft_item_recommendations
+#### tft_best_items
 
-Get best item builds and recommendations for a specific champion.
+Get best **individual** items for a champion (ranked by performance, NOT item combos). For full BiS builds, use `tft_unit_builds`.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `champion` | string | *required* | Champion name (e.g., `Ahri`, `Jinx`) |
+| `champion` | string | *required* | Champion name (e.g., `Kindred`, `Jinx`) |
 
 Returns:
-- Top 5 best item builds with win rates
-- Best individual items for that champion
-- Tip with best-in-slot recommendation
+- Champion overall stats (avg placement, pick rate)
+- Top 10 individual items ranked by performance
+- Quick tip with top 3 items
 
 #### tft_export_data
 
