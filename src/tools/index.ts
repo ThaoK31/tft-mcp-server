@@ -184,5 +184,28 @@ export const TFT_TOOLS: Tool[] = [
         }
       }
     }
+  },
+  {
+    name: "tft_compare_players",
+    description: "Compare your stats with another player. Shows side-by-side comparison of placements, win rates, most played units/traits, and playstyle differences.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        gameName: {
+          type: "string",
+          description: "The other player's game name (e.g., 'PlayerName')"
+        },
+        tagLine: {
+          type: "string",
+          description: "The other player's tag line (e.g., 'EUW', 'NA1')"
+        },
+        matchCount: {
+          type: "number",
+          default: 10,
+          description: "Number of recent matches to analyze for each player (default: 10)"
+        }
+      },
+      required: ["gameName", "tagLine"]
+    }
   }
 ];

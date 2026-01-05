@@ -98,6 +98,7 @@ Create `.mcp.json` in your project directory:
 | `tft_ranked_stats` | Current rank, LP, winrate, games played |
 | `tft_lp_history` | LP progression tracking (params: `action`, `matchCount`) |
 | `tft_coaching` | Personalized recommendations based on recent matches (param: `matchCount`) |
+| `tft_compare_players` | Compare your stats with another player (params: `gameName`, `tagLine`) |
 
 ### Meta Data
 
@@ -146,6 +147,23 @@ Track LP progression over time with local storage.
 |-----------|------|---------|-------------|
 | `action` | string | `view` | `view` = show history, `update` = fetch new matches, `reset` = clear |
 | `matchCount` | number | 10 | Matches to check for updates |
+
+#### tft_compare_players
+
+Compare your stats with another player side-by-side.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `gameName` | string | *required* | Other player's game name |
+| `tagLine` | string | *required* | Other player's tag line (e.g., `EUW`, `NA1`) |
+| `matchCount` | number | 10 | Recent matches to analyze per player |
+
+Returns:
+- Side-by-side rank and stats comparison
+- Win rate, top 4 rate, avg placement verdict
+- Most played units and traits for both players
+- Shared playstyle elements
+- Best/worst performing units for each player
 
 ## Region Detection
 
