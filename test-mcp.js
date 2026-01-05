@@ -1,8 +1,14 @@
 import { spawn } from 'child_process';
 
+const apiKey = process.env.RIOT_API_KEY;
+if (!apiKey) {
+  console.error('❌ Set RIOT_API_KEY environment variable');
+  process.exit(1);
+}
+
 const server = spawn('node', [
   'dist/index.js',
-  '--apiKey', 'RIOT_API_KEY_HERE',
+  '--apiKey', apiKey,
   '--gameName', 'ThaoK3',
   '--tagLine', 'EUW'
 ]);
