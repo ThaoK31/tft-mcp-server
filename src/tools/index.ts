@@ -207,5 +207,62 @@ export const TFT_TOOLS: Tool[] = [
       },
       required: ["gameName", "tagLine"]
     }
+  },
+  {
+    name: "tft_item_recommendations",
+    description: "Get best item builds and recommendations for a specific champion. Shows top builds, best individual items, and win rates.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        champion: {
+          type: "string",
+          description: "Champion name to get item recommendations for (e.g., 'Ahri', 'Jinx')"
+        }
+      },
+      required: ["champion"]
+    }
+  },
+  {
+    name: "tft_export_data",
+    description: "Export your recent match data to CSV or JSON format for analysis or visualization.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        format: {
+          type: "string",
+          enum: ["csv", "json"],
+          default: "json",
+          description: "Export format (default: json)"
+        },
+        matchCount: {
+          type: "number",
+          default: 10,
+          description: "Number of recent matches to export (default: 10)"
+        }
+      }
+    }
+  },
+  {
+    name: "tft_lookup_player",
+    description: "Look up any player's rank and recent performance without comparing to yourself.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        gameName: {
+          type: "string",
+          description: "Player's game name"
+        },
+        tagLine: {
+          type: "string",
+          description: "Player's tag line (e.g., 'EUW', 'NA1')"
+        },
+        matchCount: {
+          type: "number",
+          default: 5,
+          description: "Number of recent matches to show (default: 5)"
+        }
+      },
+      required: ["gameName", "tagLine"]
+    }
   }
 ];

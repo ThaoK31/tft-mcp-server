@@ -1,5 +1,10 @@
 # TFT MCP Server
 
+[![npm version](https://img.shields.io/npm/v/mcp-server-tft.svg)](https://www.npmjs.com/package/mcp-server-tft)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![TFT Set](https://img.shields.io/badge/TFT-Set%2016-blue.svg)](https://teamfighttactics.leagueoflegends.com/)
+
 A Model Context Protocol (MCP) server for Teamfight Tactics (TFT) Set 16 that provides comprehensive access to TFT game data, match analysis, meta information, and personalized coaching.
 
 ## Features
@@ -99,6 +104,9 @@ Create `.mcp.json` in your project directory:
 | `tft_lp_history` | LP progression tracking (params: `action`, `matchCount`) |
 | `tft_coaching` | Personalized recommendations based on recent matches (param: `matchCount`) |
 | `tft_compare_players` | Compare your stats with another player (params: `gameName`, `tagLine`) |
+| `tft_lookup_player` | Look up any player's rank and recent performance |
+| `tft_item_recommendations` | Get best item builds for a specific champion |
+| `tft_export_data` | Export match data to CSV or JSON format |
 
 ### Meta Data
 
@@ -164,6 +172,38 @@ Returns:
 - Most played units and traits for both players
 - Shared playstyle elements
 - Best/worst performing units for each player
+
+#### tft_lookup_player
+
+Look up any player's rank and recent performance without comparing to yourself.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `gameName` | string | *required* | Player's game name |
+| `tagLine` | string | *required* | Player's tag line (e.g., `EUW`, `NA1`) |
+| `matchCount` | number | 5 | Recent matches to show |
+
+#### tft_item_recommendations
+
+Get best item builds and recommendations for a specific champion.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `champion` | string | *required* | Champion name (e.g., `Ahri`, `Jinx`) |
+
+Returns:
+- Top 5 best item builds with win rates
+- Best individual items for that champion
+- Tip with best-in-slot recommendation
+
+#### tft_export_data
+
+Export your recent match data to CSV or JSON format for external analysis.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `format` | string | `json` | Export format (`csv` or `json`) |
+| `matchCount` | number | 10 | Number of matches to export |
 
 ## Region Detection
 
