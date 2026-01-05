@@ -120,6 +120,15 @@ Create `.mcp.json` in your project directory:
 | `tft_best_items` | Best individual items for a specific champion |
 | `tft_current_patch` | Current patch info and total games analyzed |
 
+### Game Info (Set 16)
+
+| Tool | Description |
+|------|-------------|
+| `tft_champion_info` | Champion details: cost, traits, ability, stats |
+| `tft_trait_info` | Trait details: description, breakpoints, champions |
+| `tft_list_champions` | List all champions (filter by cost or trait) |
+| `tft_list_traits` | List all traits with breakpoints |
+
 ### Tool Details
 
 #### tft_match_tracker

@@ -264,5 +264,59 @@ export const TFT_TOOLS: Tool[] = [
       },
       required: ["gameName", "tagLine"]
     }
+  },
+  // ============ Game Info (Set 16 data) ============
+  {
+    name: "tft_champion_info",
+    description: "Get detailed info about a TFT champion: cost, traits, ability (with scaling), and base stats.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        champion: {
+          type: "string",
+          description: "Champion name (e.g., 'Kindred', 'Ahri')"
+        }
+      },
+      required: ["champion"]
+    }
+  },
+  {
+    name: "tft_trait_info",
+    description: "Get detailed info about a TFT trait: description, breakpoints, and which champions have it.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        trait: {
+          type: "string",
+          description: "Trait name (e.g., 'Quickstriker', 'Eternal')"
+        }
+      },
+      required: ["trait"]
+    }
+  },
+  {
+    name: "tft_list_champions",
+    description: "List all TFT Set 16 champions. Can filter by cost (1-5) or trait name.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        cost: {
+          type: "number",
+          description: "Filter by cost (1-5)"
+        },
+        trait: {
+          type: "string",
+          description: "Filter by trait name"
+        }
+      }
+    }
+  },
+  {
+    name: "tft_list_traits",
+    description: "List all TFT Set 16 traits with their breakpoints and champion counts.",
+    inputSchema: {
+      type: "object",
+      properties: {}
+    }
   }
 ];

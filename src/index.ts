@@ -19,6 +19,7 @@ import { handleTftCoaching } from "./tools/coaching.js";
 import { handleTftLPHistory } from "./tools/lphistory.js";
 import { handleTftComparePlayers } from "./tools/compare.js";
 import { handleTftBestItems, handleTftExportData, handleTftLookupPlayer } from "./tools/utility.js";
+import { handleTftChampionInfo, handleTftTraitInfo, handleTftListChampions, handleTftListTraits } from "./tools/gameinfo.js";
 import { handleTftRankedStats } from "./tools/ranked.js";
 import {
   handleTftMetaComps,
@@ -177,6 +178,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
       case "tft_lookup_player": {
         return await handleTftLookupPlayer(request.params.arguments as { gameName: string; tagLine: string; matchCount?: number });
+      }
+      case "tft_champion_info": {
+        return await handleTftChampionInfo(request.params.arguments as { champion: string });
+      }
+      case "tft_trait_info": {
+        return await handleTftTraitInfo(request.params.arguments as { trait: string });
+      }
+      case "tft_list_champions": {
+        return await handleTftListChampions(request.params.arguments as { cost?: number; trait?: string });
+      }
+      case "tft_list_traits": {
+        return await handleTftListTraits();
       }
       default:
         throw new McpError(
